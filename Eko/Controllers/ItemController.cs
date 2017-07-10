@@ -15,21 +15,22 @@ namespace Eko.Controllers
 {
     public class ItemController : Controller
     {
+        private readonly UserManager<ApplicationUser> _userManager;
         private ApplicationDbContext db;
 
-        public ItemController(ApplicationDbContext dbContext)
+        public ItemController(UserManager<ApplicationUser> userManager, ApplicationDbContext dbContext)
         {
+            _userManager = userManager;
             db = dbContext;
         }
 
-        //[AllowAnonymous]
-        public ActionResult Index()
+        [AllowAnonymous]
+        public async Task<IActionResult> Index()
         {
             if (User.Identity.IsAuthenticated)
             {
                 string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                //var userId = UserManager<IdentityUser>.GetUserId(User);
-                //ApplicationUser currentUser = await UserManager.FindByIdAsync(userId);
+                ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
                 
                 List<UserItem> items = db
                     .UserItems
@@ -38,14 +39,14 @@ namespace Eko.Controllers
                     .ToList();
 
                 // OPTIONAL: Make sure they see something
-                //if (items.Count == 0) // They have no related products so just send all of them
-                //    items = db.UserItems.Include(item => item.Item).ToList();
+                if (items.Count == 0) // They have no related products so just send all of them
+                    items = db.UserItems.Include(item => item.Item).ToList();
 
                 // only send the products related to that user
                 return View(items);
             }
             // User is not authenticated, send them all products
-            return View(db.UserItems.Include(item => item.Item).ToList());
+            return View(db.UserItems.Include(item => item.Item).Include(item => item.ApplicationUser).ToList());
         }
 
         public IActionResult Sell()
@@ -60,13 +61,12 @@ namespace Eko.Controllers
         }
 
         [HttpPost]
-        public IActionResult Sell(SellItemViewModel sellItemViewModel)
+        public async Task<IActionResult> Sell(SellItemViewModel sellItemViewModel)
         {
             if (ModelState.IsValid)
             {
-                //ClaimsPrincipal user = User;
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                ApplicationUser currentUser = db.Users.FirstOrDefault(x => x.Id == userId);
+                string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
 
                 Item newItem = new Item()
                 {

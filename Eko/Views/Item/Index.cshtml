@@ -11,7 +11,7 @@
     @foreach (var item in Model)
     {
         <tr>
-            <td>@item.Item.Owner.UserName</td>
+            <td>@item.ApplicationUser.UserName</td>
             <td>@item.Item.Title</td>
             <td>@item.Item.Price</td>
             <td>@item.Item.Description</td>
