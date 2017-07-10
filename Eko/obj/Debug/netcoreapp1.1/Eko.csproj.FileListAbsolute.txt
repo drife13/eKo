@@ -1,0 +1,10 @@
+C:\Users\derek_000\lc101\Eko\Eko\bin\Debug\netcoreapp1.1\Eko.deps.json
+C:\Users\derek_000\lc101\Eko\Eko\bin\Debug\netcoreapp1.1\Eko.runtimeconfig.json
+C:\Users\derek_000\lc101\Eko\Eko\bin\Debug\netcoreapp1.1\Eko.runtimeconfig.dev.json
+C:\Users\derek_000\lc101\Eko\Eko\bin\Debug\netcoreapp1.1\Eko.dll
+C:\Users\derek_000\lc101\Eko\Eko\bin\Debug\netcoreapp1.1\Eko.pdb
+C:\Users\derek_000\lc101\Eko\Eko\obj\Debug\netcoreapp1.1\Eko.csprojResolveAssemblyReference.cache
+C:\Users\derek_000\lc101\Eko\Eko\obj\Debug\netcoreapp1.1\UserSecretsAssemblyInfo.cs
+C:\Users\derek_000\lc101\Eko\Eko\obj\Debug\netcoreapp1.1\Eko.AssemblyInfo.cs
+C:\Users\derek_000\lc101\Eko\Eko\obj\Debug\netcoreapp1.1\Eko.dll
+C:\Users\derek_000\lc101\Eko\Eko\obj\Debug\netcoreapp1.1\Eko.pdb

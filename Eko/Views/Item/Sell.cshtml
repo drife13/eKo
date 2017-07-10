@@ -1,0 +1,27 @@
+﻿@model Eko.Models.ItemViewModels.SellItemViewModel
+
+<h2>Sell something!</h2>
+
+<form asp-controller="Item" asp-action="Sell" method="post">
+
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input class="form-control" asp-for="Title" />
+        <span asp-validation-for="Title"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Price"></label>
+        <input class="form-control" asp-for="Price" />
+        <span asp-validation-for="Price"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <input class="form-control" asp-for="Description" />
+        <span asp-validation-for="Description"></span>
+    </div>
+
+    <input type="submit" value="Post Listing" />
+
+</form>
