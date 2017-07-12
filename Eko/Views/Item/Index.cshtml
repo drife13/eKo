@@ -1,4 +1,4 @@
-﻿@model List<UserItem>
+﻿@model List<Item>
 
 <table class="table">
     <tr>
@@ -11,10 +11,10 @@
     @foreach (var item in Model)
     {
         <tr>
-            <td>@item.ApplicationUser.UserName</td>
-            <td>@item.Item.Title</td>
-            <td>@item.Item.Price</td>
-            <td>@item.Item.Description</td>
+            <td>@item.Owner.UserName</td>
+            <td>@item.Title</td>
+            <td>@item.Price</td>
+            <td>@item.Description</td>
         </tr>
     }
 </table>

@@ -32,21 +32,20 @@ namespace Eko.Controllers
                 string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
                 
-                List<UserItem> items = db
-                    .UserItems
-                    .Include(item => item.Item)
-                    .Where(ui => ui.ApplicationUser.Id == userId)
+                List<Item> items = db
+                    .Items
+                    .Where(i => i.Owner.Id == userId)
                     .ToList();
 
                 // OPTIONAL: Make sure they see something
                 if (items.Count == 0) // They have no related products so just send all of them
-                    items = db.UserItems.Include(item => item.Item).ToList();
+                    items = db.Items.ToList();
 
                 // only send the products related to that user
                 return View(items);
             }
             // User is not authenticated, send them all products
-            return View(db.UserItems.Include(item => item.Item).Include(item => item.ApplicationUser).ToList());
+            return View(db.Items.ToList());
         }
 
         public IActionResult Sell()
@@ -76,13 +75,6 @@ namespace Eko.Controllers
                     Description = sellItemViewModel.Description,
                 };
                 db.Items.Add(newItem);
-
-                UserItem newUserItem = new UserItem
-                {
-                    ApplicationUser = currentUser,
-                    Item = newItem
-                };
-                db.UserItems.Add(newUserItem);
 
                 db.SaveChanges();
 
