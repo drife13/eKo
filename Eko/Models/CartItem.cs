@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Eko.Models
 {
-    public class Cart
+    public class CartItem
     {
         public string ApplicationUserID { get; set; }
         public ApplicationUser ApplicationUser { get; set; }

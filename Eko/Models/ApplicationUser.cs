@@ -9,6 +9,6 @@ namespace Eko.Models
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
-        public IList<Cart> Cart { get; set; }
+        public IList<CartItem> Cart { get; set; }
     }
 }

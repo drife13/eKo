@@ -1,0 +1,25 @@
+﻿@model Item
+
+<table class="table">
+    <tr>
+        <td>Seller</td>
+        <td>@Model.Owner.UserName</td>
+    </tr>
+    <tr>
+        <td>Title</td>
+        <td>@Model.Title</td>
+    </tr>
+    <tr>
+        <td>Price</td>
+        <td>@Model.Price</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>@Model.Description</td>
+    </tr>
+</table>
+
+<form asp-controller="Items" asp-action="AddToCart" method="post">
+    <input type="hidden" name="id" value="@Model.ID" />
+    <input type="submit" value="Add to Cart" />
+</form>

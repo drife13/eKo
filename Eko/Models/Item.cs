@@ -24,6 +24,7 @@ namespace Eko.Models
         //public Make Make { get; set; }
         //public Model Model { get; set; }
 
+        //public Image Image { get; set; }
         //public IList<Images> Images { get; set; }
 
         public Item()

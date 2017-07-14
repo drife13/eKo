@@ -11,7 +11,7 @@ namespace Eko.Data
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Item> Items { get; set; }
-        public DbSet<Cart> Cart { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
         
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -24,7 +24,7 @@ namespace Eko.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
 
-            builder.Entity<Cart>().HasKey(c => new { c.ApplicationUserID, c.ItemID });
+            builder.Entity<CartItem>().HasKey(c => new { c.ApplicationUserID, c.ItemID });
         }
     }
 }

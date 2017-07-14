@@ -12,7 +12,7 @@
     {
         <tr>
             <td>@item.Owner.UserName</td>
-            <td>@item.Title</td>
+            <td><a asp-controller="Items" asp-action="ViewItem" asp-route-id="@item.ID">@item.Title</a></td>
             <td>@item.Price</td>
             <td>@item.Description</td>
         </tr>

@@ -13,12 +13,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Eko.Controllers
 {
-    public class ItemController : Controller
+    public class ItemsController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private ApplicationDbContext db;
 
-        public ItemController(UserManager<ApplicationUser> userManager, ApplicationDbContext dbContext)
+        public ItemsController(UserManager<ApplicationUser> userManager, ApplicationDbContext dbContext)
         {
             _userManager = userManager;
             db = dbContext;
@@ -48,40 +48,31 @@ namespace Eko.Controllers
             return View(db.Items.ToList());
         }
 
-        public IActionResult Sell()
+        [HttpGet]
+        [Route("/Items/{id}")]
+        public IActionResult ViewItem(int id)
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                SellItemViewModel sellItemViewModel = new SellItemViewModel();
-                return View(sellItemViewModel);
-            }
-
-            return Redirect("/Account/Login/");
+            return View(db.Items.Include(i => i.Owner).Single(i => i.ID == id));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Sell(SellItemViewModel sellItemViewModel)
+        public async Task<ActionResult> AddToCart(string id)
         {
-            if (ModelState.IsValid)
+            int itemId = Convert.ToInt32(id);
+
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+
+            CartItem newCartItem = new CartItem()
             {
-                string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+                ApplicationUser = currentUser,
+                Item = db.Items.Single(i => i.ID == itemId)
+            };
+            db.CartItems.Add(newCartItem);
 
-                Item newItem = new Item()
-                {
-                    Owner = currentUser,
-                    Title = sellItemViewModel.Title,
-                    Price = sellItemViewModel.Price,
-                    Description = sellItemViewModel.Description,
-                };
-                db.Items.Add(newItem);
+            db.SaveChanges();
 
-                db.SaveChanges();
-
-                return Redirect("/Item/");
-            }
-
-            return View(sellItemViewModel);
+            return Redirect("/Cart");
         }
     }
 }
