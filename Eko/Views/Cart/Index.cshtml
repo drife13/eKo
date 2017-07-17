@@ -1,9 +1,12 @@
 ﻿@model List<CartItem>
 
+<h2>Cart</h2>
+
 <table class="table">
     <tr>
         <th>Title</th>
         <th>Price</th>
+        <th>Remove from Cart</th>
     </tr>
     
     @foreach (CartItem cartItem in Model)
@@ -11,6 +14,12 @@
         <tr>
             <td>@cartItem.Item.Title</td>
             <td>@cartItem.Item.Price</td>
+            <td>
+                <form asp-controller="Cart" asp-action="RemoveFromCart" method="post">
+                    <input type="hidden" name="id" value="@cartItem.Item.ID" />
+                    <input type="submit" value="Remove" />
+                </form>
+            </td>
         </tr>
     }
 

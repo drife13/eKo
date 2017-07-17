@@ -45,54 +45,16 @@ namespace Eko.Controllers
                 return View(items);
             }
             // User is not authenticated, send them all products
-            return View(db.Items.ToList());
+            return View(db.Items.Include(i => i.Owner).ToList());
         }
 
         [HttpGet]
         [Route("/Items/{id}")]
         public IActionResult ViewItem(int id)
         {
-            return View(db.Items.Include(i => i.Owner).Single(i => i.ID == id));
-        }
+            Item item = db.Items.Include(i => i.Owner).Single(i => i.ID == id);
 
-        [HttpPost]
-        public async Task<ActionResult> AddToWatchList(string id)
-        {
-            int itemId = Convert.ToInt32(id);
-
-            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
-
-            WatchListItem newWatchListItem = new WatchListItem()
-            {
-                ApplicationUser = currentUser,
-                Item = db.Items.Single(i => i.ID == itemId)
-            };
-            db.WatchListItems.Add(newWatchListItem);
-
-            db.SaveChanges();
-
-            return Redirect("/WatchList");
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> AddToCart(string id)
-        {
-            int itemId = Convert.ToInt32(id);
-
-            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
-
-            CartItem newCartItem = new CartItem()
-            {
-                ApplicationUser = currentUser,
-                Item = db.Items.Single(i => i.ID == itemId)
-            };
-            db.CartItems.Add(newCartItem);
-
-            db.SaveChanges();
-
-            return Redirect("/Cart");
+            return View(item);
         }
     }
 }

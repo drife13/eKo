@@ -19,12 +19,12 @@
     </tr>
 </table>
 
-<form asp-controller="Items" asp-action="AddToWatchList" method="post">
+<form asp-controller="WatchList" asp-action="AddToWatchList" method="post">
     <input type="hidden" name="id" value="@Model.ID" />
     <input type="submit" value="Add to Watch List" />
 </form>
 
-<form asp-controller="Items" asp-action="AddToCart" method="post">
+<form asp-controller="Cart" asp-action="AddToCart" method="post">
     <input type="hidden" name="id" value="@Model.ID" />
     <input type="submit" value="Add to Cart" />
 </form>

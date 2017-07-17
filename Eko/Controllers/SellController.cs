@@ -54,7 +54,7 @@ namespace Eko.Controllers
 
                 db.SaveChanges();
 
-                return Redirect("/Items");
+                return Redirect("/Items/" + newItem.ID);
             }
 
             return View(sellItemViewModel);

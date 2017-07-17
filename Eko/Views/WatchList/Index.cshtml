@@ -1,10 +1,13 @@
 ﻿@model List<WatchListItem>
 
+<h2>Watch List</h2>
+
 <table class="table">
     <tr>
         <th>Title</th>
         <th>Price</th>
-        <th></th>
+        <th>Remove from Watch List</th>
+        <th>Add to Cart</th>
     </tr>
 
     @foreach (WatchListItem item in Model)
@@ -13,7 +16,13 @@
             <td>@item.Item.Title</td>
             <td>@item.Item.Price</td>
             <td>
-                <form asp-controller="Items" asp-action="AddToCart" method="post">
+                <form asp-controller="WatchList" asp-action="RemoveFromWatchList" method="post">
+                    <input type="hidden" name="id" value="@item.Item.ID" />
+                    <input type="submit" value="Remove" />
+                </form>
+            </td>
+            <td>
+                <form asp-controller="Cart" asp-action="AddToCart" method="post">
                     <input type="hidden" name="id" value="@item.Item.ID" />
                     <input type="submit" value="Add to Cart" />
                 </form>
