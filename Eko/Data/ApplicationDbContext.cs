@@ -12,7 +12,8 @@ namespace Eko.Data
     {
         public DbSet<Item> Items { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
-        
+        public DbSet<WatchListItem> WatchListItems { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         { }
@@ -25,6 +26,7 @@ namespace Eko.Data
             // Add your customizations after calling base.OnModelCreating(builder);
 
             builder.Entity<CartItem>().HasKey(c => new { c.ApplicationUserID, c.ItemID });
+            builder.Entity<WatchListItem>().HasKey(c => new { c.ApplicationUserID, c.ItemID });
         }
     }
 }

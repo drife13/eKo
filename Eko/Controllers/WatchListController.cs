@@ -13,12 +13,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Eko.Controllers
 {
-    public class CartController : Controller
+    public class WatchListController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private ApplicationDbContext db;
 
-        public CartController(UserManager<ApplicationUser> userManager, ApplicationDbContext dbContext)
+        public WatchListController(UserManager<ApplicationUser> userManager, ApplicationDbContext dbContext)
         {
             _userManager = userManager;
             db = dbContext;
@@ -32,13 +32,13 @@ namespace Eko.Controllers
                 string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
 
-                List<CartItem> cart = db
-                    .CartItems
+                List<WatchListItem> watchList = db
+                    .WatchListItems
                     .Include(c => c.Item)
                     .Where(c => c.ApplicationUserID == userId)
                     .ToList();
 
-                return View(cart);
+                return View(watchList);
             }
 
             return Redirect("/Account/Login");

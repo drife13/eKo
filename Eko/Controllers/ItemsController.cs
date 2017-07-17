@@ -56,6 +56,26 @@ namespace Eko.Controllers
         }
 
         [HttpPost]
+        public async Task<ActionResult> AddToWatchList(string id)
+        {
+            int itemId = Convert.ToInt32(id);
+
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+
+            WatchListItem newWatchListItem = new WatchListItem()
+            {
+                ApplicationUser = currentUser,
+                Item = db.Items.Single(i => i.ID == itemId)
+            };
+            db.WatchListItems.Add(newWatchListItem);
+
+            db.SaveChanges();
+
+            return Redirect("/WatchList");
+        }
+
+        [HttpPost]
         public async Task<ActionResult> AddToCart(string id)
         {
             int itemId = Convert.ToInt32(id);

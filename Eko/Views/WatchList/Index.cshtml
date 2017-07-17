@@ -1,0 +1,24 @@
+﻿@model List<WatchListItem>
+
+<table class="table">
+    <tr>
+        <th>Title</th>
+        <th>Price</th>
+        <th></th>
+    </tr>
+
+    @foreach (WatchListItem item in Model)
+    {
+        <tr>
+            <td>@item.Item.Title</td>
+            <td>@item.Item.Price</td>
+            <td>
+                <form asp-controller="Items" asp-action="AddToCart" method="post">
+                    <input type="hidden" name="id" value="@item.Item.ID" />
+                    <input type="submit" value="Add to Cart" />
+                </form>
+            </td>
+        </tr>
+    }
+
+</table>

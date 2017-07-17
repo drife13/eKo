@@ -14,7 +14,7 @@ namespace Eko.Models.ItemViewModels
         public string Title { get; set; }
 
         [Required]
-        public float Price { get; set; }
+        public decimal Price { get; set; }
 
         [Required(ErrorMessage = "You must give your listing a description")]
         public string Description { get; set; }
