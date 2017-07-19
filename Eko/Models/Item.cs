@@ -9,6 +9,7 @@ namespace Eko.Models
     {
         public int ID { get; set; }
         public ApplicationUser Owner { get; set; }
+        public string OwnerId { get; set; }
 
         public string Title { get; set; }
         public decimal Price { get; set; }

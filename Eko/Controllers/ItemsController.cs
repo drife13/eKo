@@ -25,31 +25,33 @@ namespace Eko.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
+        {
+            List<Item> items = db.Items.Include(i => i.Owner).ToList();
+
+            return View(items);
+        }
+
+        public IActionResult MyStore()
         {
             if (User.Identity.IsAuthenticated)
             {
                 string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
                 
                 List<Item> items = db
                     .Items
                     .Where(i => i.Owner.Id == userId)
                     .ToList();
 
-                // OPTIONAL: Make sure they see something
-                if (items.Count == 0) // They have no related products so just send all of them
-                    items = db.Items.ToList();
-
                 // only send the products related to that user
                 return View(items);
             }
-            // User is not authenticated, send them all products
-            return View(db.Items.Include(i => i.Owner).ToList());
+            
+            return Redirect("/Account/Login");
         }
 
         [HttpGet]
-        [Route("/Items/{id}")]
+        //[Route("/Items/ViewItem/{id}")]
         public IActionResult ViewItem(int id)
         {
             Item item = db.Items.Include(i => i.Owner).Single(i => i.ID == id);

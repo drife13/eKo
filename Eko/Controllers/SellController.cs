@@ -46,6 +46,7 @@ namespace Eko.Controllers
                 Item newItem = new Item()
                 {
                     Owner = currentUser,
+                    OwnerId = currentUser.Id,
                     Title = sellItemViewModel.Title,
                     Price = sellItemViewModel.Price,
                     Description = sellItemViewModel.Description,
@@ -54,7 +55,7 @@ namespace Eko.Controllers
 
                 db.SaveChanges();
 
-                return Redirect("/Items/" + newItem.ID);
+                return Redirect("/Items/ViewItem/" + newItem.ID);
             }
 
             return View(sellItemViewModel);

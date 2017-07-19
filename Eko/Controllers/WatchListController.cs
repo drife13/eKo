@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Eko.Models;
-using Eko.Models.ItemViewModels;
 using Eko.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
@@ -52,13 +51,19 @@ namespace Eko.Controllers
             string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
 
-            IList<WatchListItem> existingItems = db
+            IList<WatchListItem> existingWatchListItems = db
                 .WatchListItems
                 .Where(ci => ci.ApplicationUserID == userId)
                 .Where(ci => ci.ItemID == itemId)
                 .ToList();
 
-            if (existingItems.Count == 0)
+            IList<Item> userItems = db
+                .Items
+                .Where(ci => ci.Owner.Id == userId)
+                .Where(ci => ci.ID == itemId)
+                .ToList();
+
+            if (existingWatchListItems.Count == 0 && userItems.Count == 0)
             {
                 WatchListItem newWatchListItem = new WatchListItem()
                 {

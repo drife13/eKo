@@ -52,13 +52,19 @@ namespace Eko.Controllers
             string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
 
-            IList<CartItem> existingItems = db
+            IList<CartItem> existingCartItems = db
                 .CartItems
                 .Where(ci => ci.ApplicationUserID == userId)
                 .Where(ci => ci.ItemID == itemId)
                 .ToList();
 
-            if (existingItems.Count == 0)
+            IList<Item> userItems = db
+                .Items
+                .Where(ci => ci.Owner.Id == userId)
+                .Where(ci => ci.ID == itemId)
+                .ToList();
+
+            if (existingCartItems.Count == 0 && userItems.Count == 0)
             {
                 CartItem newCartItem = new CartItem()
                 {
