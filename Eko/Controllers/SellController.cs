@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace Eko.Controllers
 {
@@ -55,10 +57,41 @@ namespace Eko.Controllers
 
                 db.SaveChanges();
 
+                UploadImage(sellItemViewModel.Files, newItem);
+
                 return Redirect("/Items/ViewItem/" + newItem.ID);
             }
 
             return View(sellItemViewModel);
+        }
+
+        public void UploadImage(IList<IFormFile> files, Item associatedItem)
+        {
+            foreach (IFormFile uploadedImage in files)
+            {
+                if (uploadedImage == null || uploadedImage.ContentType.ToLower().StartsWith("image/"))
+                {
+                    MemoryStream ms = new MemoryStream();
+                    uploadedImage.OpenReadStream().CopyTo(ms);
+
+                    System.Drawing.Image image = System.Drawing.Image.FromStream(ms);
+
+                    Image imageEntity = new Image()
+                    {
+                        Id = Guid.NewGuid(),
+                        Item = associatedItem,
+                        Name = uploadedImage.Name,
+                        Data = ms.ToArray(),
+                        Width = image.Width,
+                        Height = image.Height,
+                        ContentType = uploadedImage.ContentType
+                    };
+
+                    db.Images.Add(imageEntity);
+                }
+            }
+
+            db.SaveChanges();
         }
     }
 }

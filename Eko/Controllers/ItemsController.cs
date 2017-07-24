@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace Eko.Controllers
 {
@@ -55,8 +56,25 @@ namespace Eko.Controllers
         public IActionResult ViewItem(int id)
         {
             Item item = db.Items.Include(i => i.Owner).Single(i => i.ID == id);
+            List<Guid> imageIds = db.Images.Where(m => m.Item.ID == id).Select(m => m.Id).ToList();
 
-            return View(item);
+            ViewItemViewModel viewItemViewModel = new ViewItemViewModel()
+            {
+                Item = item,
+                ImageIds = imageIds
+            };
+
+            return View(viewItemViewModel);
+        }
+
+        [HttpGet]
+        public FileStreamResult ViewImage(Guid id)
+        {
+            Image image = db.Images.FirstOrDefault(m => m.Id == id);
+
+            MemoryStream ms = new MemoryStream(image.Data);
+
+            return new FileStreamResult(ms, image.ContentType);
         }
     }
 }

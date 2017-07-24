@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Eko.Models;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace Eko.Models.ItemViewModels
 {
@@ -18,6 +19,9 @@ namespace Eko.Models.ItemViewModels
 
         [Required(ErrorMessage = "You must give your listing a description")]
         public string Description { get; set; }
+
+        [Required]
+        public IList<IFormFile> Files { get; set; }
 
         public SellItemViewModel() { }
     }

@@ -12,6 +12,7 @@
     <UserSecretsId>aspnet-Eko-90939683-a539-4b25-a7c8-36ac215bbc41</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="CoreCompat.System.Drawing" Version="1.0.0-beta006" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.1.2" />

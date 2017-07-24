@@ -11,6 +11,7 @@ namespace Eko.Data
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Item> Items { get; set; }
+        public DbSet<Image> Images { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<WatchListItem> WatchListItems { get; set; }
 
