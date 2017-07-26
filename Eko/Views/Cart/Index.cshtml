@@ -1,19 +1,20 @@
-﻿@model List<CartItem>
+﻿@model Eko.Models.CartViewModels.CartViewModel
 
 <h2>Cart</h2>
 
 <table class="table">
+
     <tr>
         <th>Title</th>
         <th>Price</th>
         <th>Remove from Cart</th>
     </tr>
     
-    @foreach (CartItem cartItem in Model)
+    @foreach (CartItem cartItem in Model.Cart)
     {
         <tr>
             <td>@cartItem.Item.Title</td>
-            <td>@cartItem.Item.Price</td>
+            <td>$@cartItem.Item.Price</td>
             <td>
                 <form asp-controller="Cart" asp-action="RemoveFromCart" method="post">
                     <input type="hidden" name="id" value="@cartItem.Item.ID" />
@@ -23,4 +24,16 @@
         </tr>
     }
 
+    <tr>
+        <td></td>
+        <td><strong>SUBTOTAL:</strong></td>
+        <td>$@Model.Subtotal</td>
+    </tr>
+
 </table>
+
+<form asp-controller="Cart" asp-action="Checkout" method="get">
+    <input type="submit" value="Checkout" />
+</form>
+
+<a href="/Cart/Checkout" class="btn btn-default">Checkout</a>

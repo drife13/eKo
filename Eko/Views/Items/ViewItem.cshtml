@@ -19,9 +19,13 @@
     </tr>
 </table>
 
-@foreach (var imageId in Model.ImageIds)
+@if (Model.ImageIds.Count != 0)
 {
-    <img src="/Items/ViewImage/@imageId" />
+    <h3>Images</h3>
+    @foreach (var imageId in Model.ImageIds)
+    {
+        <img src="/Items/ViewImage/@imageId" height="500" hspace="20"/>
+    }
 }
 
 <form asp-controller="WatchList" asp-action="AddToWatchList" method="post">

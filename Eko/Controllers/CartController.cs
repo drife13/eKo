@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Eko.Models;
-using Eko.Models.ItemViewModels;
+using Eko.Models.CartViewModels;
 using Eko.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
@@ -38,7 +38,7 @@ namespace Eko.Controllers
                     .Where(c => c.ApplicationUserID == userId)
                     .ToList();
 
-                return View(cart);
+                return View(new CartViewModel(cart));
             }
 
             return Redirect("/Account/Login");
@@ -74,7 +74,7 @@ namespace Eko.Controllers
                 db.CartItems.Add(newCartItem);
                 db.SaveChanges();
             }
-
+            
             return Redirect("/Cart");
         }
 
@@ -92,6 +92,33 @@ namespace Eko.Controllers
             db.SaveChanges();
 
             return Redirect("/Cart");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Checkout()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+
+                List<CartItem> cart = db
+                    .CartItems
+                    .Include(c => c.Item)
+                    .Where(c => c.ApplicationUserID == userId)
+                    .ToList();
+
+                return View(new CartViewModel(cart));
+            }
+
+            return Redirect("/Account/Login");
+        }
+
+        [HttpPost]
+        public IActionResult Buy()
+        {
+            int orderId = 1;
+            return Redirect("/MyOrders/" + orderId);
         }
     }
 }
