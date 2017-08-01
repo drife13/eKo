@@ -8,9 +8,10 @@ using Eko.Data;
 namespace Eko.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170801015137_Migration7")]
+    partial class Migration7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -68,11 +69,11 @@ namespace Eko.Data.Migrations
 
             modelBuilder.Entity("Eko.Models.CartItem", b =>
                 {
-                    b.Property<string>("ApplicationUserID");
+                    b.Property<string>("UserID");
 
                     b.Property<int>("ItemID");
 
-                    b.HasKey("ApplicationUserID", "ItemID");
+                    b.HasKey("UserID", "ItemID");
 
                     b.HasIndex("ItemID");
 
@@ -116,7 +117,7 @@ namespace Eko.Data.Migrations
 
                     b.Property<bool>("ForSale");
 
-                    b.Property<int?>("OrderID");
+                    b.Property<int>("OrderId");
 
                     b.Property<string>("OwnerId");
 
@@ -128,7 +129,7 @@ namespace Eko.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("OrderID");
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("OwnerId");
 
@@ -140,26 +141,24 @@ namespace Eko.Data.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ApplicationUserID");
+                    b.Property<string>("BuyerID");
 
                     b.Property<DateTime>("OrderDate");
 
-                    b.Property<decimal>("Total");
-
                     b.HasKey("ID");
 
-                    b.HasIndex("ApplicationUserID");
+                    b.HasIndex("BuyerID");
 
                     b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Eko.Models.WatchListItem", b =>
                 {
-                    b.Property<string>("ApplicationUserID");
+                    b.Property<string>("UserID");
 
                     b.Property<int>("ItemID");
 
-                    b.HasKey("ApplicationUserID", "ItemID");
+                    b.HasKey("UserID", "ItemID");
 
                     b.HasIndex("ItemID");
 
@@ -275,14 +274,14 @@ namespace Eko.Data.Migrations
 
             modelBuilder.Entity("Eko.Models.CartItem", b =>
                 {
-                    b.HasOne("Eko.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("Eko.Models.Item", "Item")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserID")
+                        .HasForeignKey("ItemID")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Eko.Models.Item", "Item")
-                        .WithMany("CartItems")
-                        .HasForeignKey("ItemID")
+                    b.HasOne("Eko.Models.ApplicationUser", "User")
+                        .WithMany("Cart")
+                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -295,9 +294,10 @@ namespace Eko.Data.Migrations
 
             modelBuilder.Entity("Eko.Models.Item", b =>
                 {
-                    b.HasOne("Eko.Models.Order")
-                        .WithMany("Items")
-                        .HasForeignKey("OrderID");
+                    b.HasOne("Eko.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Eko.Models.ApplicationUser", "Owner")
                         .WithMany()
@@ -306,21 +306,21 @@ namespace Eko.Data.Migrations
 
             modelBuilder.Entity("Eko.Models.Order", b =>
                 {
-                    b.HasOne("Eko.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("Eko.Models.ApplicationUser", "Buyer")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserID");
+                        .HasForeignKey("BuyerID");
                 });
 
             modelBuilder.Entity("Eko.Models.WatchListItem", b =>
                 {
-                    b.HasOne("Eko.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("Eko.Models.Item", "Item")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserID")
+                        .HasForeignKey("ItemID")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Eko.Models.Item", "Item")
-                        .WithMany("WatchListItems")
-                        .HasForeignKey("ItemID")
+                    b.HasOne("Eko.Models.ApplicationUser", "User")
+                        .WithMany("WatchList")
+                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

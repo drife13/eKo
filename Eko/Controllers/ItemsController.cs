@@ -52,7 +52,7 @@ namespace Eko.Controllers
         }
 
         [HttpGet]
-        //[Route("/Items/ViewItem/{id}")]
+        //[Route("/Orders/ViewItem/{id}")]
         public IActionResult ViewItem(int id)
         {
             Item item = db.Items.Include(i => i.Owner).Single(i => i.ID == id);

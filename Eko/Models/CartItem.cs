@@ -12,5 +12,15 @@ namespace Eko.Models
 
         public int ItemID { get; set; }
         public Item Item { get; set; }
+
+        public CartItem() { }
+
+        public CartItem(ApplicationUser user, Item item)
+        {
+            ApplicationUserID = user.Id;
+            ApplicationUser = user;
+            ItemID = item.ID;
+            Item = item;
+        }
     }
 }

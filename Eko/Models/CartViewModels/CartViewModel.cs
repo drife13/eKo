@@ -7,11 +7,11 @@ namespace Eko.Models.CartViewModels
 {
     public class CartViewModel
     {
-        public List<CartItem> Cart { get; set; }
+        public IList<CartItem> Cart { get; set; }
 
         public decimal Subtotal { get; set; }
 
-        public CartViewModel(List<CartItem> cart)
+        public CartViewModel(IList<CartItem> cart)
         {
             Cart = cart;
             foreach (CartItem item in cart)
@@ -19,5 +19,4 @@ namespace Eko.Models.CartViewModels
                 Subtotal += item.Item.Price;
             }
         }
-    }
-}
+    }}

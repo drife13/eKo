@@ -8,9 +8,10 @@ using Eko.Data;
 namespace Eko.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170801035423_Migration10")]
+    partial class Migration10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -143,8 +144,6 @@ namespace Eko.Data.Migrations
                     b.Property<string>("ApplicationUserID");
 
                     b.Property<DateTime>("OrderDate");
-
-                    b.Property<decimal>("Total");
 
                     b.HasKey("ID");
 

@@ -32,13 +32,13 @@ namespace Eko.Controllers
                 string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
 
-                List<CartItem> cart = db
+                List<CartItem> cartItems = db
                     .CartItems
                     .Include(c => c.Item)
                     .Where(c => c.ApplicationUserID == userId)
                     .ToList();
 
-                return View(new CartViewModel(cart));
+                return View(new CartViewModel(cartItems));
             }
 
             return Redirect("/Account/Login");
@@ -52,25 +52,20 @@ namespace Eko.Controllers
             string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
 
-            IList<CartItem> existingCartItems = db
-                .CartItems
-                .Where(ci => ci.ApplicationUserID == userId)
-                .Where(ci => ci.ItemID == itemId)
-                .ToList();
-
-            IList<Item> userItems = db
+            Item addItem = db
                 .Items
-                .Where(ci => ci.Owner.Id == userId)
-                .Where(ci => ci.ID == itemId)
+                .Include(i => i.Owner)
+                .Single(i => i.ID == itemId);
+
+            List<CartItem> existingCartItems = db
+                .CartItems
+                .Include(c => c.Item)
+                .Where(c => c.Item.ID == itemId && c.ApplicationUserID == userId)
                 .ToList();
 
-            if (existingCartItems.Count == 0 && userItems.Count == 0)
+            if (existingCartItems.Count == 0 && addItem.Owner.Id != userId)
             {
-                CartItem newCartItem = new CartItem()
-                {
-                    ApplicationUser = currentUser,
-                    Item = db.Items.Single(i => i.ID == itemId)
-                };
+                CartItem newCartItem = new CartItem(currentUser, addItem);
                 db.CartItems.Add(newCartItem);
                 db.SaveChanges();
             }
@@ -86,7 +81,7 @@ namespace Eko.Controllers
 
             CartItem removeCartItem = db
                 .CartItems
-                .Single(i => i.ItemID == itemId && i.ApplicationUserID == userId);
+                .Single(i => i.ItemID == itemId && i.ApplicationUser.Id == userId);
 
             db.CartItems.Remove(removeCartItem);
             db.SaveChanges();
@@ -94,31 +89,89 @@ namespace Eko.Controllers
             return Redirect("/Cart");
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Checkout()
+        [HttpPost]
+        public async Task<IActionResult> Checkout(int[] cartItemIds)
         {
             if (User.Identity.IsAuthenticated)
             {
                 string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
 
-                List<CartItem> cart = db
+                List<CartItem> cartItems = db
                     .CartItems
                     .Include(c => c.Item)
                     .Where(c => c.ApplicationUserID == userId)
                     .ToList();
 
-                return View(new CartViewModel(cart));
+                var setCartItemIds = new HashSet<int>();
+                foreach (CartItem item in cartItems)
+                {
+                    setCartItemIds.Add(item.Item.ID);
+                }
+                if (!setCartItemIds.SetEquals(cartItemIds))
+                {
+                    return Redirect("/Cart");
+                }
+
+                return View(new CartViewModel(cartItems));
             }
 
             return Redirect("/Account/Login");
         }
 
         [HttpPost]
-        public IActionResult Buy()
+        public async Task<IActionResult> PlaceOrder(int[] cartItemIds)
         {
-            int orderId = 1;
-            return Redirect("/MyOrders/" + orderId);
+            if (User.Identity.IsAuthenticated)
+            {
+                string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+
+                List<CartItem> cartItems = db
+                    .CartItems
+                    .Include(c => c.Item)
+                    .Where(c => c.ApplicationUserID == userId)
+                    .ToList();
+
+                // Verify that posted cart IDs match those in user's cart.
+                var setCartItemIds = new HashSet<int>();
+                foreach (CartItem item in cartItems)
+                {
+                    setCartItemIds.Add(item.Item.ID);
+                }
+                if (!setCartItemIds.SetEquals(cartItemIds))
+                {
+                    return Redirect("/Cart");
+                }
+
+                Order newOrder = new Order(currentUser);
+                
+                foreach (int cartItemId in cartItemIds)
+                {
+                    foreach (var cartItem in db.CartItems.Where(c => c.Item.ID == cartItemId))
+                    {
+                        db.CartItems.Remove(cartItem);
+                    }
+
+                    foreach (var watchListItem in db.WatchListItems.Where(c => c.Item.ID == cartItemId))
+                    {
+                        db.WatchListItems.Remove(watchListItem);
+                    }
+
+                    Item item = db.Items.Single(i => i.ID == cartItemId);
+                    item.ForSale = false;
+
+                    newOrder.Items.Add(item);
+                    newOrder.Total += item.Price;
+                }
+                db.Orders.Add(newOrder);
+
+                db.SaveChanges();
+                
+                return Redirect("/Orders/ViewOrder/" + newOrder.ID);
+            }
+
+            return Redirect("/Account/Login");
         }
     }
 }

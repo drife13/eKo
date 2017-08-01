@@ -8,6 +8,7 @@ namespace Eko.Models
     public class Item
     {
         public int ID { get; set; }
+
         public ApplicationUser Owner { get; set; }
         public string OwnerId { get; set; }
 
@@ -15,8 +16,10 @@ namespace Eko.Models
         public decimal Price { get; set; }
         public string Description { get; set; }
         public DateTime CreatedDate { get; set; }
+        public DateTime SoldDate { get; set; }
 
-        //public bool Sold { get; set; }
+        public bool ForSale { get; set; }
+
         //public bool Ended { get; set; }
         //public int Views { get; set; }
         //public int Watchers { get; set; }
@@ -24,11 +27,15 @@ namespace Eko.Models
         //public Condition Condition { get; set; }
         //public Make Make { get; set; }
         //public Model Model { get; set; }
+        //public Category Category { get; set; }
 
-        
+        public IList<CartItem> CartItems { get; set; }
+        public IList<WatchListItem> WatchListItems { get; set; }
+
         public Item()
         {
             CreatedDate = DateTime.Now;
+            ForSale = true;
         }
     }
 }

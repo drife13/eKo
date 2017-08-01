@@ -14,6 +14,7 @@ namespace Eko.Data
         public DbSet<Image> Images { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<WatchListItem> WatchListItems { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

@@ -5,7 +5,7 @@
 <table class="table">
 
     <tr>
-        <th>Title</th>
+        <th>Listing Title</th>
         <th>Price</th>
         <th>Remove from Cart</th>
     </tr>
@@ -25,15 +25,17 @@
     }
 
     <tr>
-        <td></td>
         <td><strong>SUBTOTAL:</strong></td>
         <td>$@Model.Subtotal</td>
+        <td></td>
     </tr>
 
 </table>
 
-<form asp-controller="Cart" asp-action="Checkout" method="get">
-    <input type="submit" value="Checkout" />
+<form asp-controller="Cart" asp-action="Checkout" method="post">
+    @foreach (CartItem cartItem in Model.Cart)
+    {
+        <input type="hidden" name="cartItemIds" value="@cartItem.Item.ID" />
+    }
+    <input type="submit" value="Checkout"/>
 </form>
-
-<a href="/Cart/Checkout" class="btn btn-default">Checkout</a>

@@ -31,13 +31,13 @@ namespace Eko.Controllers
                 string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
 
-                List<WatchListItem> watchList = db
+                List<WatchListItem> watchListItems = db
                     .WatchListItems
                     .Include(c => c.Item)
                     .Where(c => c.ApplicationUserID == userId)
                     .ToList();
 
-                return View(watchList);
+                return View(watchListItems);
             }
 
             return Redirect("/Account/Login");
@@ -51,25 +51,20 @@ namespace Eko.Controllers
             string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
 
-            IList<WatchListItem> existingWatchListItems = db
-                .WatchListItems
-                .Where(ci => ci.ApplicationUserID == userId)
-                .Where(ci => ci.ItemID == itemId)
-                .ToList();
-
-            IList<Item> userItems = db
+            Item addItem = db
                 .Items
-                .Where(ci => ci.Owner.Id == userId)
-                .Where(ci => ci.ID == itemId)
+                .Include(i => i.Owner)
+                .Single(i => i.ID == itemId);
+
+            List<WatchListItem> existingWatchListItems = db
+                .WatchListItems
+                .Include(c => c.Item)
+                .Where(c => c.Item.ID == itemId && c.ApplicationUserID == userId)
                 .ToList();
 
-            if (existingWatchListItems.Count == 0 && userItems.Count == 0)
+            if (existingWatchListItems.Count==0 && addItem.Owner.Id!=userId)
             {
-                WatchListItem newWatchListItem = new WatchListItem()
-                {
-                    ApplicationUser = currentUser,
-                    Item = db.Items.Single(i => i.ID == itemId)
-                };
+                WatchListItem newWatchListItem = new WatchListItem(currentUser, addItem);
                 db.WatchListItems.Add(newWatchListItem);
                 db.SaveChanges();
             }
@@ -85,7 +80,7 @@ namespace Eko.Controllers
             
             WatchListItem removeWatchListItem = db
                 .WatchListItems
-                .Single(i => i.ItemID == itemId && i.ApplicationUserID == userId);
+                .Single(i => i.ItemID == itemId && i.ApplicationUser.Id == userId);
             
             db.WatchListItems.Remove(removeWatchListItem);
             db.SaveChanges();

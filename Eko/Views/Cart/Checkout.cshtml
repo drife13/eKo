@@ -1,1 +1,33 @@
-﻿
+﻿@model Eko.Models.CartViewModels.CartViewModel
+
+<h2>Checkout</h2>
+
+<table class="table">
+
+    <tr>
+        <th>Listing Title</th>
+        <th>Price</th>
+    </tr>
+
+    @foreach (CartItem cartItem in Model.Cart)
+    {
+        <tr>
+            <td>@cartItem.Item.Title</td>
+            <td>$@cartItem.Item.Price</td>
+        </tr>
+    }
+
+    <tr>
+        <td><strong>TOTAL:</strong></td>
+        <td>$@Model.Subtotal</td>
+    </tr>
+
+</table>
+
+<form asp-controller="Cart" asp-action="PlaceOrder" method="post">
+    @foreach (CartItem cartItem in Model.Cart)
+    {
+        <input type="hidden" name="cartItemIds" value="@cartItem.Item.ID" />
+    }
+    <input type="submit" value="Complete Purchase" />
+</form>
