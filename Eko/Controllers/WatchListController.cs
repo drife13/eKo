@@ -58,13 +58,12 @@ namespace Eko.Controllers
                     .Include(i => i.Owner)
                     .Single(i => i.ID == itemId);
 
-                List<WatchListItem> existingWatchListItems = db
+                addItem.WatchListItems = db
                     .WatchListItems
-                    .Include(c => c.Item)
-                    .Where(c => c.Item.ID == itemId && c.ApplicationUserID == userId)
+                    .Where(c => c.ItemID == addItem.ID)
                     .ToList();
 
-                if (existingWatchListItems.Count==0 && addItem.Owner.Id!=userId)
+                if (!addItem.BelongsTo(currentUser) && !addItem.InWatchList(currentUser) && addItem.ForSale)
                 {
                     WatchListItem newWatchListItem = new WatchListItem(currentUser, addItem);
                     db.WatchListItems.Add(newWatchListItem);

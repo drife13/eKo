@@ -59,15 +59,12 @@ namespace Eko.Controllers
                     .Include(i => i.Owner)
                     .Single(i => i.ID == itemId);
 
-                List<CartItem> existingCartItems = db
+                addItem.CartItems = db
                     .CartItems
-                    .Include(c => c.Item)
-                    .Where(c => c.Item.ID == itemId && c.ApplicationUserID == userId)
+                    .Where(c => c.ItemID == addItem.ID)
                     .ToList();
 
-                if (existingCartItems.Count == 0
-                    && addItem.Owner.Id != userId
-                    && addItem.ForSale)
+                if (!addItem.BelongsTo(currentUser) && !addItem.InCart(currentUser) && addItem.ForSale)
                 {
                     CartItem newCartItem = new CartItem(currentUser, addItem);
                     db.CartItems.Add(newCartItem);

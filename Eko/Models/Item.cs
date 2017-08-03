@@ -37,5 +37,28 @@ namespace Eko.Models
             CreatedDate = DateTime.Now;
             ForSale = true;
         }
+
+        public bool BelongsTo(ApplicationUser user)
+        {
+            return Owner.Id == user.Id;
+        }
+
+        public bool InCart(ApplicationUser user)
+        {
+            List<CartItem> cartItem = CartItems
+                .Where(i => i.ApplicationUserID == user.Id)
+                .ToList();
+
+            return cartItem.Count != 0;
+        }
+
+        public bool InWatchList(ApplicationUser user)
+        {
+            List<WatchListItem> watchListItem = WatchListItems
+                .Where(i => i.ApplicationUserID == user.Id)
+                .ToList();
+
+            return watchListItem.Count != 0;
+        }
     }
 }
