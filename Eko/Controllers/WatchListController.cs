@@ -46,46 +46,56 @@ namespace Eko.Controllers
         [HttpPost]
         public async Task<ActionResult> AddToWatchList(string id)
         {
-            int itemId = Convert.ToInt32(id);
-
-            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
-
-            Item addItem = db
-                .Items
-                .Include(i => i.Owner)
-                .Single(i => i.ID == itemId);
-
-            List<WatchListItem> existingWatchListItems = db
-                .WatchListItems
-                .Include(c => c.Item)
-                .Where(c => c.Item.ID == itemId && c.ApplicationUserID == userId)
-                .ToList();
-
-            if (existingWatchListItems.Count==0 && addItem.Owner.Id!=userId)
+            if (User.Identity.IsAuthenticated)
             {
-                WatchListItem newWatchListItem = new WatchListItem(currentUser, addItem);
-                db.WatchListItems.Add(newWatchListItem);
-                db.SaveChanges();
+                int itemId = Convert.ToInt32(id);
+
+                string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+
+                Item addItem = db
+                    .Items
+                    .Include(i => i.Owner)
+                    .Single(i => i.ID == itemId);
+
+                List<WatchListItem> existingWatchListItems = db
+                    .WatchListItems
+                    .Include(c => c.Item)
+                    .Where(c => c.Item.ID == itemId && c.ApplicationUserID == userId)
+                    .ToList();
+
+                if (existingWatchListItems.Count==0 && addItem.Owner.Id!=userId)
+                {
+                    WatchListItem newWatchListItem = new WatchListItem(currentUser, addItem);
+                    db.WatchListItems.Add(newWatchListItem);
+                    db.SaveChanges();
+                }
+
+                return Redirect("/WatchList");
             }
 
-            return Redirect("/WatchList");
+        return Redirect("/Account/Login");
         }
 
         [HttpPost]
         public IActionResult RemoveFromWatchList(string id)
         {
-            int itemId = Convert.ToInt32(id);
-            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (User.Identity.IsAuthenticated)
+            {
+                int itemId = Convert.ToInt32(id);
+                string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             
-            WatchListItem removeWatchListItem = db
-                .WatchListItems
-                .Single(i => i.ItemID == itemId && i.ApplicationUser.Id == userId);
+                WatchListItem removeWatchListItem = db
+                    .WatchListItems
+                    .Single(i => i.ItemID == itemId && i.ApplicationUser.Id == userId);
             
-            db.WatchListItems.Remove(removeWatchListItem);
-            db.SaveChanges();
+                db.WatchListItems.Remove(removeWatchListItem);
+                db.SaveChanges();
 
-            return Redirect("/WatchList");
+                return Redirect("/WatchList");
+            }
+        
+        return Redirect("/Account/Login");
         }
-    }
+    }   
 }

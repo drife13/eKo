@@ -9,6 +9,7 @@
             <th>Title</th>
             <th>Price</th>
             <th>Description</th>
+            <th>Status</th>
         </tr>
 
         @foreach (var item in Model)
@@ -17,6 +18,8 @@
                 <td><a asp-controller="Items" asp-action="ViewItem" asp-route-id="@item.ID">@item.Title</a></td>
                 <td>$@item.Price</td>
                 <td>@item.Description</td>
+            @if (item.ForSale) { <td>For Sale</td> }
+            else { <td>Sold @item.SoldDate</td> }
             </tr>
         }
     </table>

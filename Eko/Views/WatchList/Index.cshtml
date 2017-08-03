@@ -22,10 +22,17 @@
                 </form>
             </td>
             <td>
+                @if (item.Item.ForSale)
+                {
                 <form asp-controller="Cart" asp-action="AddToCart" method="post">
                     <input type="hidden" name="id" value="@item.Item.ID" />
                     <input type="submit" value="Add to Cart" />
                 </form>
+                }
+                else
+                {
+                    <strong>Sold</strong>
+                }
             </td>
         </tr>
     }

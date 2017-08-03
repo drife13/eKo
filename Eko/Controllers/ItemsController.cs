@@ -28,7 +28,11 @@ namespace Eko.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            List<Item> items = db.Items.Include(i => i.Owner).ToList();
+            List<Item> items = db
+                .Items
+                .Include(i => i.Owner)
+                .Where(i => i.ForSale == true)
+                .ToList();
 
             return View(items);
         }

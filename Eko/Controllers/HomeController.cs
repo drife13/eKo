@@ -24,10 +24,18 @@ namespace Eko.Controllers
             db = dbContext;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
-            //TO DO: send most recently added items
-            return View();
+            List<Item> items = db
+                .Items
+                .Include(i => i.Owner)
+                .Where(i => i.ForSale == true)
+                .OrderByDescending(i => i.CreatedDate)
+                .Take(6)
+                .ToList();
+
+            return View(items);
         }
 
         public IActionResult About()

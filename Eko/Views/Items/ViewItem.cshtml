@@ -33,7 +33,14 @@
     <input type="submit" value="Add to Watch List" />
 </form>
 
+@if (Model.Item.ForSale)
+{
 <form asp-controller="Cart" asp-action="AddToCart" method="post">
     <input type="hidden" name="id" value="@Model.Item.ID" />
     <input type="submit" value="Add to Cart" />
 </form>
+}
+else
+{
+    <div>Item is sold.</div>
+}

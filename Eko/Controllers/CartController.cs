@@ -47,47 +47,60 @@ namespace Eko.Controllers
         [HttpPost]
         public async Task<ActionResult> AddToCart(string id)
         {
-            int itemId = Convert.ToInt32(id);
-
-            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
-
-            Item addItem = db
-                .Items
-                .Include(i => i.Owner)
-                .Single(i => i.ID == itemId);
-
-            List<CartItem> existingCartItems = db
-                .CartItems
-                .Include(c => c.Item)
-                .Where(c => c.Item.ID == itemId && c.ApplicationUserID == userId)
-                .ToList();
-
-            if (existingCartItems.Count == 0 && addItem.Owner.Id != userId)
+            if (User.Identity.IsAuthenticated)
             {
-                CartItem newCartItem = new CartItem(currentUser, addItem);
-                db.CartItems.Add(newCartItem);
-                db.SaveChanges();
+                int itemId = Convert.ToInt32(id);
+
+                string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+
+                Item addItem = db
+                    .Items
+                    .Include(i => i.Owner)
+                    .Single(i => i.ID == itemId);
+
+                List<CartItem> existingCartItems = db
+                    .CartItems
+                    .Include(c => c.Item)
+                    .Where(c => c.Item.ID == itemId && c.ApplicationUserID == userId)
+                    .ToList();
+
+                if (existingCartItems.Count == 0
+                    && addItem.Owner.Id != userId
+                    && addItem.ForSale)
+                {
+                    CartItem newCartItem = new CartItem(currentUser, addItem);
+                    db.CartItems.Add(newCartItem);
+                    db.SaveChanges();
+                }
+
+                return Redirect("/Cart");
             }
-            
-            return Redirect("/Cart");
+
+            return Redirect("/Account/Login");
         }
 
         [HttpPost]
         public IActionResult RemoveFromCart(string id)
         {
-            int itemId = Convert.ToInt32(id);
-            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (User.Identity.IsAuthenticated)
+            {
+                int itemId = Convert.ToInt32(id);
+                string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            CartItem removeCartItem = db
-                .CartItems
-                .Single(i => i.ItemID == itemId && i.ApplicationUser.Id == userId);
+                CartItem removeCartItem = db
+                    .CartItems
+                    .Single(i => i.ItemID == itemId && i.ApplicationUser.Id == userId);
 
-            db.CartItems.Remove(removeCartItem);
-            db.SaveChanges();
+                db.CartItems.Remove(removeCartItem);
+                db.SaveChanges();
 
-            return Redirect("/Cart");
+                return Redirect("/Cart");
+            }
+
+            return Redirect("/Account/Login");
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Checkout(int[] cartItemIds)
@@ -151,11 +164,6 @@ namespace Eko.Controllers
                     foreach (var cartItem in db.CartItems.Where(c => c.Item.ID == cartItemId))
                     {
                         db.CartItems.Remove(cartItem);
-                    }
-
-                    foreach (var watchListItem in db.WatchListItems.Where(c => c.Item.ID == cartItemId))
-                    {
-                        db.WatchListItems.Remove(watchListItem);
                     }
 
                     Item item = db.Items.Single(i => i.ID == cartItemId);
