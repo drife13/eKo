@@ -45,6 +45,8 @@ namespace Eko.Controllers
                 string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
 
+                Condition condition = (Condition) Enum.Parse(typeof(Condition), sellItemViewModel.Condition);
+
                 Item newItem = new Item()
                 {
                     Owner = currentUser,
@@ -52,6 +54,7 @@ namespace Eko.Controllers
                     Title = sellItemViewModel.Title,
                     Price = sellItemViewModel.Price,
                     Description = sellItemViewModel.Description,
+                    Condition = condition
                 };
                 db.Items.Add(newItem);
 

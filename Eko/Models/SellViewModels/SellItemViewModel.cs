@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Eko.Models;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Eko.Models.ItemViewModels
 {
@@ -20,9 +21,28 @@ namespace Eko.Models.ItemViewModels
         [Required(ErrorMessage = "You must give your listing a description")]
         public string Description { get; set; }
 
+        [Required(ErrorMessage = "You must indicate your item's condition")]
+        public string Condition { get; set; }
+
         [Required]
         public IList<IFormFile> Files { get; set; }
 
-        public SellItemViewModel() { }
+
+        public List<SelectListItem> Conditions { get; set; }
+
+
+        public SellItemViewModel()
+        {
+            Conditions = new List<SelectListItem>();
+
+            foreach (Condition condition in Enum.GetValues(typeof(Condition)))
+            {
+                Conditions.Add(new SelectListItem
+                {
+                    Value = condition.ToString(),
+                    Text = condition.ToString()
+                });
+            }
+        }
     }
 }

@@ -15,6 +15,7 @@ namespace Eko.Models
         public string Title { get; set; }
         public decimal Price { get; set; }
         public string Description { get; set; }
+        public Condition Condition { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime SoldDate { get; set; }
 
@@ -24,10 +25,12 @@ namespace Eko.Models
         //public int Views { get; set; }
         //public int Watchers { get; set; }
 
-        //public Condition Condition { get; set; }
         //public Make Make { get; set; }
         //public Model Model { get; set; }
         //public Category Category { get; set; }
+        //public int Year { get; set; }
+
+        //public decimal Shipping { get; set; }
 
         public IList<CartItem> CartItems { get; set; }
         public IList<WatchListItem> WatchListItems { get; set; }
