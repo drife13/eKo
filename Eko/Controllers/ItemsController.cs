@@ -59,13 +59,20 @@ namespace Eko.Controllers
         //[Route("/Orders/ViewItem/{id}")]
         public IActionResult ViewItem(int id)
         {
-            Item item = db.Items.Include(i => i.Owner).Single(i => i.ID == id);
+            Item item = db
+                .Items
+                .Include(i => i.Owner)
+                .Include(i => i.Brand)
+                .Include(i => i.Model)
+                .Single(i => i.ID == id);
             List<Guid> imageIds = db.Images.Where(m => m.Item.ID == id).Select(m => m.Id).ToList();
+            int watchers = db.WatchListItems.Where(i => i.ItemID == id).ToList().Count;
 
             ViewItemViewModel viewItemViewModel = new ViewItemViewModel()
             {
                 Item = item,
-                ImageIds = imageIds
+                ImageIds = imageIds,
+                Watchers = watchers
             };
 
             return View(viewItemViewModel);

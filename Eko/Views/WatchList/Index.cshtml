@@ -13,8 +13,8 @@
     @foreach (WatchListItem item in Model)
     {
         <tr>
-            <td>@item.Item.Title</td>
-            <td>@item.Item.Price</td>
+            <td><a asp-controller="Items" asp-action="ViewItem" asp-route-id="@item.Item.ID">@item.Item.Title</a></td>
+            <td>$@item.Item.Price</td>
             <td>
                 <form asp-controller="WatchList" asp-action="RemoveFromWatchList" method="post">
                     <input type="hidden" name="id" value="@item.Item.ID" />

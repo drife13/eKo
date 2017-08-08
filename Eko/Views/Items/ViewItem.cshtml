@@ -21,6 +21,18 @@
         <td>Condition</td>
         <td>@Model.Item.Condition</td>
     </tr>
+    <tr>
+        <td>Brand</td>
+        <td>@Model.Item.Brand.Name</td>
+    </tr>
+    <tr>
+        <td>Model</td>
+        <td>@Model.Item.Model.Name</td>
+    </tr>
+    <tr>
+        <td>Year</td>
+        <td>@Model.Item.Year</td>
+    </tr>
 </table>
 
 @if (Model.ImageIds.Count != 0)
@@ -31,6 +43,8 @@
         <img src="/Items/ViewImage/@imageId" height="500" hspace="20"/>
     }
 }
+
+<div>@Model.Watchers  Watchers</div>
 
 <form asp-controller="WatchList" asp-action="AddToWatchList" method="post">
     <input type="hidden" name="id" value="@Model.Item.ID" />

@@ -47,6 +47,30 @@ namespace Eko.Controllers
 
                 Condition condition = (Condition) Enum.Parse(typeof(Condition), sellItemViewModel.Condition);
 
+                List<Brand> existingBrands = db.Brands.Where(b => b.Name == sellItemViewModel.Brand).ToList();
+                Brand brand = new Brand();
+                if (existingBrands.Count == 0)
+                {
+                    brand = new Brand() { Name = sellItemViewModel.Brand };
+                    db.Brands.Add(brand);
+                }
+                else
+                {
+                    brand = existingBrands[0];
+                }
+
+                List<Model> existingModels = db.Models.Where(m => m.Name == sellItemViewModel.Model && m.Brand == brand).ToList();
+                Model model = new Model();
+                if (existingModels.Count == 0)
+                {
+                    model = new Model() { Name = sellItemViewModel.Model, Brand = brand };
+                    db.Models.Add(model);
+                }
+                else
+                {
+                    model = existingModels[0];
+                }
+
                 Item newItem = new Item()
                 {
                     Owner = currentUser,
@@ -54,7 +78,10 @@ namespace Eko.Controllers
                     Title = sellItemViewModel.Title,
                     Price = sellItemViewModel.Price,
                     Description = sellItemViewModel.Description,
-                    Condition = condition
+                    Condition = condition,
+                    Brand = brand,
+                    Model = model,
+                    Year = sellItemViewModel.Year
                 };
                 db.Items.Add(newItem);
 

@@ -15,22 +15,25 @@ namespace Eko.Models
         public string Title { get; set; }
         public decimal Price { get; set; }
         public string Description { get; set; }
+
         public Condition Condition { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime SoldDate { get; set; }
 
+        public Brand Brand { get; set; }
+        public int BrandID { get; set; }
+
+        public Model Model { get; set; }
+        public int ModelID { get; set; }
+
+        public int Year { get; set; }
+
+        //public Category Category { get; set; }
+        
         public bool ForSale { get; set; }
-
         //public bool Ended { get; set; }
         //public int Views { get; set; }
-        //public int Watchers { get; set; }
 
-        //public Make Make { get; set; }
-        //public Model Model { get; set; }
-        //public Category Category { get; set; }
-        //public int Year { get; set; }
-
-        //public decimal Shipping { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime SoldDate { get; set; }
 
         public IList<CartItem> CartItems { get; set; }
         public IList<WatchListItem> WatchListItems { get; set; }

@@ -13,7 +13,7 @@
     @foreach (CartItem cartItem in Model.Cart)
     {
         <tr>
-            <td>@cartItem.Item.Title</td>
+            <td><a asp-controller="Items" asp-action="ViewItem" asp-route-id="@cartItem.Item.ID">@cartItem.Item.Title</a></td>
             <td>$@cartItem.Item.Price</td>
             <td>
                 <form asp-controller="Cart" asp-action="RemoveFromCart" method="post">

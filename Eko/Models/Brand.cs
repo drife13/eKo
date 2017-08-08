@@ -5,14 +5,9 @@ using System.Threading.Tasks;
 
 namespace Eko.Models
 {
-    public enum Condition
+    public class Brand
     {
-        New,
-        Mint,
-        Excellent,
-        Good,
-        Fair,
-        Poor,
-        Nonfunctional
+        public int ID { get; set; }
+        public string Name { get; set; }
     }
 }
