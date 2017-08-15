@@ -30,7 +30,12 @@ namespace Eko.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                SellItemViewModel sellItemViewModel = new SellItemViewModel();
+                List<Category> categories = db
+                    .Categories
+                    .OrderBy(c => c.FullName)
+                    .ToList();
+
+                SellItemViewModel sellItemViewModel = new SellItemViewModel(categories);
                 return View(sellItemViewModel);
             }
 
@@ -47,6 +52,8 @@ namespace Eko.Controllers
 
                 Condition condition = (Condition) Enum.Parse(typeof(Condition), sellItemViewModel.Condition);
 
+                Category category = db.Categories.Single(c => c.ID == sellItemViewModel.CategoryID);
+
                 List<Brand> existingBrands = db.Brands.Where(b => b.Name == sellItemViewModel.Brand).ToList();
                 Brand brand = new Brand();
                 if (existingBrands.Count == 0)
@@ -59,7 +66,10 @@ namespace Eko.Controllers
                     brand = existingBrands[0];
                 }
 
-                List<Model> existingModels = db.Models.Where(m => m.Name == sellItemViewModel.Model && m.Brand == brand).ToList();
+                List<Model> existingModels = db
+                    .Models
+                    .Where(m => m.Name == sellItemViewModel.Model && m.Brand == brand)
+                    .ToList();
                 Model model = new Model();
                 if (existingModels.Count == 0)
                 {
@@ -79,6 +89,7 @@ namespace Eko.Controllers
                     Price = sellItemViewModel.Price,
                     Description = sellItemViewModel.Description,
                     Condition = condition,
+                    Category = category,
                     Brand = brand,
                     Model = model,
                     Year = sellItemViewModel.Year
@@ -104,7 +115,7 @@ namespace Eko.Controllers
                     MemoryStream ms = new MemoryStream();
                     uploadedImage.OpenReadStream().CopyTo(ms);
 
-                    System.Drawing.Image image = System.Drawing.Image.FromStream(ms);
+                    //System.Drawing.Image image = System.Drawing.Image.FromStream(ms);
 
                     Image imageEntity = new Image()
                     {
@@ -112,8 +123,8 @@ namespace Eko.Controllers
                         Item = associatedItem,
                         Name = uploadedImage.Name,
                         Data = ms.ToArray(),
-                        Width = image.Width,
-                        Height = image.Height,
+                        //Width = image.Width,
+                        //Height = image.Height,
                         ContentType = uploadedImage.ContentType
                     };
 

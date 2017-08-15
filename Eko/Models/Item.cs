@@ -26,7 +26,8 @@ namespace Eko.Models
 
         public int Year { get; set; }
 
-        //public Category Category { get; set; }
+        public Category Category { get; set; }
+        public int CategoryID { get; set; }
         
         public bool ForSale { get; set; }
         //public bool Ended { get; set; }

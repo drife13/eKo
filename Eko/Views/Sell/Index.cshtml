@@ -18,13 +18,21 @@
 
     <div class="form-group">
         <label asp-for="Description"></label>
-        <input class="form-control" asp-for="Description" />
+        <textarea asp-for="Description"></textarea>
+        <!--input class="form-control" asp-for="Description" /-->
         <span asp-validation-for="Description"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="Condition"></label>
         <select asp-for="Condition" asp-items="@Model.Conditions"></select>
+        <span asp-validation-for="Condition"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CategoryID"></label>
+        <select asp-for="CategoryID" asp-items="@Model.Categories"></select>
+        <span asp-validation-for="CategoryID"></span>
     </div>
 
     <div class="form-group">

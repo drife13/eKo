@@ -64,6 +64,7 @@ namespace Eko.Controllers
                 .Include(i => i.Owner)
                 .Include(i => i.Brand)
                 .Include(i => i.Model)
+                .Include(i => i.Category)
                 .Single(i => i.ID == id);
             List<Guid> imageIds = db.Images.Where(m => m.Item.ID == id).Select(m => m.Id).ToList();
             int watchers = db.WatchListItems.Where(i => i.ItemID == id).ToList().Count;

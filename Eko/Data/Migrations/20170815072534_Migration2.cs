@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Eko.Data.Migrations
 {
-    public partial class Migration5 : Migration
+    public partial class Migration2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

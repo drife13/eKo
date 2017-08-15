@@ -20,10 +20,14 @@ namespace Eko.Models.ItemViewModels
         public decimal Price { get; set; }
 
         [Required(ErrorMessage = "You must give your listing a description.")]
+        [MaxLength(5000)]
         public string Description { get; set; }
 
         [Required(ErrorMessage = "You must specify your item's condition.")]
         public string Condition { get; set; }
+
+        [Required]
+        public int CategoryID { get; set; }
 
         [Required(ErrorMessage = "You must specify your item's brand.")]
         public string Brand { get; set; }
@@ -40,8 +44,11 @@ namespace Eko.Models.ItemViewModels
 
         public List<SelectListItem> Conditions { get; set; }
 
+        public List<SelectListItem> Categories { get; set; }
 
-        public SellItemViewModel()
+        public SellItemViewModel() { }
+
+        public SellItemViewModel(List<Category> categories)
         {
             Conditions = new List<SelectListItem>();
 
@@ -53,6 +60,17 @@ namespace Eko.Models.ItemViewModels
                     Text = condition.ToString()
                 });
             }
+
+            Categories = new List<SelectListItem>();
+            foreach (Category category in categories)
+            {
+                Categories.Add(new SelectListItem
+                {
+                    Value = category.ID.ToString(),
+                    Text = category.FullName
+                });
+            }
+
         }
     }
 }

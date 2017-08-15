@@ -4,12 +4,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Eko.Data;
+using Eko.Models;
 
 namespace Eko.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170801024028_Migration9")]
-    partial class Migration9
+    [Migration("20170815071944_Migration1")]
+    partial class Migration1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -67,6 +68,18 @@ namespace Eko.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Eko.Models.Brand", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Brands");
+                });
+
             modelBuilder.Entity("Eko.Models.CartItem", b =>
                 {
                     b.Property<string>("ApplicationUserID");
@@ -80,6 +93,28 @@ namespace Eko.Data.Migrations
                     b.ToTable("CartItems");
                 });
 
+            modelBuilder.Entity("Eko.Models.Category", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("CategoryID");
+
+                    b.Property<string>("FullName");
+
+                    b.Property<int>("Level");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("ParentId");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CategoryID");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("Eko.Models.Image", b =>
                 {
                     b.Property<Guid>("Id")
@@ -89,15 +124,9 @@ namespace Eko.Data.Migrations
 
                     b.Property<byte[]>("Data");
 
-                    b.Property<int>("Height");
-
                     b.Property<int?>("ItemID");
 
-                    b.Property<int>("Length");
-
                     b.Property<string>("Name");
-
-                    b.Property<int>("Width");
 
                     b.HasKey("Id");
 
@@ -111,11 +140,19 @@ namespace Eko.Data.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("BrandID");
+
+                    b.Property<int>("CategoryID");
+
+                    b.Property<int>("Condition");
+
                     b.Property<DateTime>("CreatedDate");
 
                     b.Property<string>("Description");
 
                     b.Property<bool>("ForSale");
+
+                    b.Property<int>("ModelID");
 
                     b.Property<int?>("OrderID");
 
@@ -127,13 +164,37 @@ namespace Eko.Data.Migrations
 
                     b.Property<string>("Title");
 
+                    b.Property<int>("Year");
+
                     b.HasKey("ID");
+
+                    b.HasIndex("BrandID");
+
+                    b.HasIndex("CategoryID");
+
+                    b.HasIndex("ModelID");
 
                     b.HasIndex("OrderID");
 
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Items");
+                });
+
+            modelBuilder.Entity("Eko.Models.Model", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("BrandID");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("BrandID");
+
+                    b.ToTable("Models");
                 });
 
             modelBuilder.Entity("Eko.Models.Order", b =>
@@ -145,11 +206,39 @@ namespace Eko.Data.Migrations
 
                     b.Property<DateTime>("OrderDate");
 
+                    b.Property<int?>("ProductHistoryID");
+
+                    b.Property<decimal>("Total");
+
                     b.HasKey("ID");
 
                     b.HasIndex("ApplicationUserID");
 
+                    b.HasIndex("ProductHistoryID");
+
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Eko.Models.ProductHistory", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("BrandID");
+
+                    b.Property<int>("CategoryID");
+
+                    b.Property<int>("ModelID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("BrandID");
+
+                    b.HasIndex("CategoryID");
+
+                    b.HasIndex("ModelID");
+
+                    b.ToTable("ProductHistories");
                 });
 
             modelBuilder.Entity("Eko.Models.WatchListItem", b =>
@@ -275,14 +364,21 @@ namespace Eko.Data.Migrations
             modelBuilder.Entity("Eko.Models.CartItem", b =>
                 {
                     b.HasOne("Eko.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Cart")
+                        .WithMany()
                         .HasForeignKey("ApplicationUserID")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Eko.Models.Item", "Item")
-                        .WithMany()
+                        .WithMany("CartItems")
                         .HasForeignKey("ItemID")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Eko.Models.Category", b =>
+                {
+                    b.HasOne("Eko.Models.Category")
+                        .WithMany("Children")
+                        .HasForeignKey("CategoryID");
                 });
 
             modelBuilder.Entity("Eko.Models.Image", b =>
@@ -294,6 +390,21 @@ namespace Eko.Data.Migrations
 
             modelBuilder.Entity("Eko.Models.Item", b =>
                 {
+                    b.HasOne("Eko.Models.Brand", "Brand")
+                        .WithMany()
+                        .HasForeignKey("BrandID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Eko.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Eko.Models.Model", "Model")
+                        .WithMany()
+                        .HasForeignKey("ModelID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("Eko.Models.Order")
                         .WithMany("Items")
                         .HasForeignKey("OrderID");
@@ -303,22 +414,51 @@ namespace Eko.Data.Migrations
                         .HasForeignKey("OwnerId");
                 });
 
+            modelBuilder.Entity("Eko.Models.Model", b =>
+                {
+                    b.HasOne("Eko.Models.Brand", "Brand")
+                        .WithMany("Models")
+                        .HasForeignKey("BrandID");
+                });
+
             modelBuilder.Entity("Eko.Models.Order", b =>
                 {
                     b.HasOne("Eko.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("ApplicationUserID");
+
+                    b.HasOne("Eko.Models.ProductHistory")
+                        .WithMany("Orders")
+                        .HasForeignKey("ProductHistoryID");
+                });
+
+            modelBuilder.Entity("Eko.Models.ProductHistory", b =>
+                {
+                    b.HasOne("Eko.Models.Brand", "Brand")
+                        .WithMany()
+                        .HasForeignKey("BrandID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Eko.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Eko.Models.Model", "Model")
+                        .WithMany()
+                        .HasForeignKey("ModelID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Eko.Models.WatchListItem", b =>
                 {
                     b.HasOne("Eko.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("WatchList")
+                        .WithMany()
                         .HasForeignKey("ApplicationUserID")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Eko.Models.Item", "Item")
-                        .WithMany()
+                        .WithMany("WatchListItems")
                         .HasForeignKey("ItemID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.13
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eko", "Eko\Eko.csproj", "{EAC7C56F-3DE4-400C-80FE-6CDEF75B51DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eko", "Eko\Eko.csproj", "{BA732A7F-5745-4FB5-9754-F6AD5BE28341}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EAC7C56F-3DE4-400C-80FE-6CDEF75B51DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EAC7C56F-3DE4-400C-80FE-6CDEF75B51DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EAC7C56F-3DE4-400C-80FE-6CDEF75B51DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EAC7C56F-3DE4-400C-80FE-6CDEF75B51DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA732A7F-5745-4FB5-9754-F6AD5BE28341}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA732A7F-5745-4FB5-9754-F6AD5BE28341}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA732A7F-5745-4FB5-9754-F6AD5BE28341}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA732A7F-5745-4FB5-9754-F6AD5BE28341}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

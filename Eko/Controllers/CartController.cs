@@ -114,10 +114,7 @@ namespace Eko.Controllers
                     .ToList();
 
                 var setCartItemIds = new HashSet<int>();
-                foreach (CartItem item in cartItems)
-                {
-                    setCartItemIds.Add(item.Item.ID);
-                }
+                foreach (CartItem item in cartItems) { setCartItemIds.Add(item.Item.ID); }
                 if (!setCartItemIds.SetEquals(cartItemIds))
                 {
                     return Redirect("/Cart");

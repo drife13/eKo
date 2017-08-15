@@ -9,5 +9,7 @@ namespace Eko.Models
     {
         public int ID { get; set; }
         public string Name { get; set; }
+
+        public IList<Model> Models { get; set; }
     }
 }

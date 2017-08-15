@@ -17,7 +17,8 @@ namespace Eko.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Model> Models { get; set; }
-        //public DbSet<Category> Categories { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<ProductHistory> ProductHistories { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
