@@ -60,6 +60,7 @@ namespace Eko.Controllers
                 {
                     brand = new Brand() { Name = sellItemViewModel.Brand };
                     db.Brands.Add(brand);
+                    db.SaveChanges();
                 }
                 else
                 {
@@ -75,6 +76,7 @@ namespace Eko.Controllers
                 {
                     model = new Model() { Name = sellItemViewModel.Model, Brand = brand };
                     db.Models.Add(model);
+                    db.SaveChanges();
                 }
                 else
                 {
@@ -95,7 +97,6 @@ namespace Eko.Controllers
                     Year = sellItemViewModel.Year
                 };
                 db.Items.Add(newItem);
-
                 db.SaveChanges();
 
                 UploadImage(sellItemViewModel.Files, newItem);

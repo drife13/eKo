@@ -9,6 +9,8 @@ namespace Eko.Models.ItemViewModels
     {
         public Item Item { get; set; }
 
+        public bool Owner { get; set; }
+
         public List<Guid> ImageIds { get; set; }
 
         public int Watchers { get; set; }

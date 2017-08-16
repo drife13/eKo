@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Eko.Models.ItemViewModels;
 using System.Threading.Tasks;
 
 namespace Eko.Models
@@ -30,7 +31,7 @@ namespace Eko.Models
         public int CategoryID { get; set; }
         
         public bool ForSale { get; set; }
-        //public bool Ended { get; set; }
+        public bool Sold { get; set; }
         //public int Views { get; set; }
 
         public DateTime CreatedDate { get; set; }
@@ -41,8 +42,9 @@ namespace Eko.Models
 
         public Item()
         {
-            CreatedDate = DateTime.Now;
             ForSale = true;
+            Sold = false;
+            CreatedDate = DateTime.Now;
         }
 
         public bool BelongsTo(ApplicationUser user)
@@ -66,6 +68,25 @@ namespace Eko.Models
                 .ToList();
 
             return watchListItem.Count != 0;
+        }
+
+        public void EditProperties(EditItemViewModel e, Category category, Brand brand, Model model)
+        {
+            Title = e.Title;
+            Price = e.Price;
+            Description = e.Description;
+            Condition = (Condition)Enum.Parse(typeof(Condition), e.Condition);
+            Category = category;
+            Brand = brand;
+            Model = model;
+            Year = e.Year;
+        }
+
+        public void Sell()
+        {
+            ForSale = false;
+            Sold = true;
+            SoldDate = DateTime.Now;
         }
     }
 }

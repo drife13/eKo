@@ -12,7 +12,7 @@ namespace Eko.Data
     {
         public static void EnsureSeedData(this ApplicationDbContext db)
         {
-            if (!db.Items.Any())
+            if (!db.Categories.Any())
             {
                 string line;
                 string[] splitLine;

@@ -10,16 +10,39 @@
             <th>Price</th>
             <th>Description</th>
             <th>Status</th>
+            <th>Edit</th>
+            <th>Remove from Store</th>
         </tr>
 
         @foreach (var item in Model)
         {
             <tr>
                 <td><a asp-controller="Items" asp-action="ViewItem" asp-route-id="@item.ID">@item.Title</a></td>
+
                 <td>$@item.Price</td>
+
                 <td>@item.Description</td>
-            @if (item.ForSale) { <td>For Sale</td> }
-            else { <td>Sold @item.SoldDate</td> }
+
+                @if (item.ForSale) { <td>For Sale</td> }
+                else if (item.Sold) { <td>Sold @item.SoldDate</td> }
+                else { <td>Ended</td> }
+
+                @if (!item.Sold) { <td><a asp-controller="Items" asp-action="Edit" asp-route-id="@item.ID">Edit</a></td> }
+                else { <td>n/a</td> }
+
+                @if (item.ForSale) { <td>
+                                         <form asp-controller="Items" asp-action="RemoveFromStore" method="post">
+                                            <input type="hidden" name="id" value="@item.ID" />
+                                            <input type="submit" value="Remove from Store" />
+                                         </form>
+                                     </td> }
+                else if (!item.Sold) { <td>
+                                        <form asp-controller="Items" asp-action="AddToStore" method="post">
+                                            <input type="hidden" name="id" value="@item.ID" />
+                                            <input type="submit" value="Relist" />
+                                        </form>
+                                     </td> }
+                else { <td>n/a</td> }
             </tr>
         }
     </table>

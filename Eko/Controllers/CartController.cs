@@ -113,6 +113,7 @@ namespace Eko.Controllers
                     .Where(c => c.ApplicationUserID == userId)
                     .ToList();
 
+                // Verify that posted cart IDs match those in user's cart.
                 var setCartItemIds = new HashSet<int>();
                 foreach (CartItem item in cartItems) { setCartItemIds.Add(item.Item.ID); }
                 if (!setCartItemIds.SetEquals(cartItemIds))
@@ -161,7 +162,7 @@ namespace Eko.Controllers
                     }
 
                     Item item = db.Items.Single(i => i.ID == cartItemId);
-                    item.ForSale = false;
+                    item.Sell();
 
                     newOrder.Items.Add(item);
                     newOrder.Total += item.Price;

@@ -50,19 +50,36 @@
 
 <div>@Model.Watchers  Watchers</div>
 
-<form asp-controller="WatchList" asp-action="AddToWatchList" method="post">
-    <input type="hidden" name="id" value="@Model.Item.ID" />
-    <input type="submit" value="Add to Watch List" />
-</form>
-
-@if (Model.Item.ForSale)
+@if (!Model.Owner)
 {
-<form asp-controller="Cart" asp-action="AddToCart" method="post">
-    <input type="hidden" name="id" value="@Model.Item.ID" />
-    <input type="submit" value="Add to Cart" />
-</form>
+    <form asp-controller="WatchList" asp-action="AddToWatchList" method="post">
+        <input type="hidden" name="id" value="@Model.Item.ID" />
+        <input type="submit" value="Add to Watch List" />
+    </form>
+    <br />
+
+    @if (Model.Item.ForSale)
+    {
+        <form asp-controller="Cart" asp-action="AddToCart" method="post">
+            <input type="hidden" name="id" value="@Model.Item.ID" />
+            <input type="submit" value="Add to Cart" />
+        </form>
+        <br />
+    }
+    else
+    {
+        <div>This listing has ended.</div>
+        <br />
+    }
 }
 else
 {
-    <div>Item is sold.</div>
+    @if (!Model.Item.Sold)
+    {
+        <div><a asp-controller="Items" asp-action="Edit" asp-route-id="@Model.Item.ID">Edit</a></div>
+    }
+    else
+    {
+        <div>Item sold @Model.Item.SoldDate</div>
+    }
 }
