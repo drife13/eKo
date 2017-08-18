@@ -130,6 +130,7 @@ namespace Eko.Controllers
                     };
 
                     db.Images.Add(imageEntity);
+                    //associatedItem.ImageIds.Add(imageEntity.Id);
                 }
             }
 

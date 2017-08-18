@@ -11,16 +11,23 @@ namespace Eko.Models
         public string Name { get; set; }
         public string FullName { get; set; }
 
+        public string URLRoute {
+            get { return FullName.ToLower().Replace(" > ", "/").Replace(' ', '-'); }
+        }
+
+        public string URLName
+        {
+            get { return Name.ToLower().Replace(' ', '-') + ID; }
+        }
+
         public int ParentId { get; set; }
+        public int GrandParentId { get; set; }
         public IList<Category> Children { get; set; }
         public int Level { get; set; }
 
         public string DisplayText
         {
-            get
-            {
-                return string.Concat(new string('-', Level * 2), Name);
-            }
+            get { return string.Concat(new string('-', Level * 2), Name); }
         }
 
         public Category() { }
@@ -37,6 +44,7 @@ namespace Eko.Models
             Level = parent.Level + 1;
             FullName = parent.FullName + " > " + name;
             ParentId = parent.ID;
+            if (Level == 3) { GrandParentId = parent.ParentId; }
         }
 
         public Category(string name, IList<Category> list) : this(name)

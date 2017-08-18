@@ -9,6 +9,10 @@ namespace Eko.Models
     {
         public int ID { get; set; }
         public string Name { get; set; }
+        public string URLName
+        {
+            get { return Name.ToLower().Replace(' ', '-'); }
+        }
 
         public IList<Model> Models { get; set; }
     }

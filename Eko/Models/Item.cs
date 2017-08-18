@@ -31,12 +31,15 @@ namespace Eko.Models
         public int CategoryID { get; set; }
         
         public bool ForSale { get; set; }
+            //get { if (Sold) { return false } else { return forSale } }
+            //set { } }
         public bool Sold { get; set; }
         //public int Views { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public DateTime SoldDate { get; set; }
 
+        //public IEnumerable<Guid> ImageIds { get; set; }
         public IList<CartItem> CartItems { get; set; }
         public IList<WatchListItem> WatchListItems { get; set; }
 

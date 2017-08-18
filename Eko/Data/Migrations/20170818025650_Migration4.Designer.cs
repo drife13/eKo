@@ -9,9 +9,10 @@ using Eko.Models;
 namespace Eko.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170818025650_Migration4")]
+    partial class Migration4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -100,8 +101,6 @@ namespace Eko.Data.Migrations
                     b.Property<int?>("CategoryID");
 
                     b.Property<string>("FullName");
-
-                    b.Property<int>("GrandParentId");
 
                     b.Property<int>("Level");
 

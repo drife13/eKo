@@ -24,6 +24,7 @@ namespace Eko.Models.ItemViewModels
         public string Condition { get; set; }
 
         [Required]
+        [Display(Name = "Category")]
         public int CategoryID { get; set; }
 
         [Required(ErrorMessage = "You must specify your item's brand.")]
