@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Text.RegularExpressions;
 
 namespace Eko.Models.SearchViewModels
 {
@@ -124,15 +125,22 @@ namespace Eko.Models.SearchViewModels
                 Items = Items.Where(i => i.Brand.URLName == Brand).ToList();
             }
 
-            if (!String.IsNullOrEmpty(Query))
+            if (!String.IsNullOrWhiteSpace(Query))
             {
-                Items = Items.Where(i =>
-                    i.Title.ToLower().Contains(Query.ToLower()) ||
-                    i.Category.FullName.ToLower().Contains(Query.ToLower()) ||
-                    i.Model.Name.ToLower().Contains(Query.ToLower()) ||
-                    i.Brand.Name.ToLower().Contains(Query.ToLower()) ||
-                    i.Description.ToLower().Contains(Query.ToLower())
-                    ).ToList();
+                string query = new Regex("[^a-zA-Z0-9 -]").Replace(Query, "");
+                RegexOptions options = RegexOptions.IgnoreCase;
+
+                foreach (string term in query.Split(' '))
+                {
+                    string word = "\\b" + term + "\\b";
+                    Items = Items.Where(i =>
+                        Regex.IsMatch(i.Title, word, options) ||
+                        Regex.IsMatch(i.Category.FullName, word, options) ||
+                        Regex.IsMatch(i.Model.Name, word, options) ||
+                        Regex.IsMatch(i.Brand.Name, word, options) ||
+                        Regex.IsMatch(i.Description, word, options)
+                        ).ToList();
+                }
             }
 
             SelectCategories = new List<Category>();
