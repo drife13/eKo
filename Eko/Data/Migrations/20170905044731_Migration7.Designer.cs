@@ -9,9 +9,10 @@ using Eko.Models;
 namespace Eko.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170905044731_Migration7")]
+    partial class Migration7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -225,15 +226,17 @@ namespace Eko.Data.Migrations
 
                     b.Property<DateTime>("Date");
 
-                    b.Property<int>("ItemId");
+                    b.Property<int>("ItemID");
 
-                    b.Property<int>("ModelId");
+                    b.Property<int>("ModelID");
+
+                    b.Property<int>("OrderID");
 
                     b.Property<decimal>("Price");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("ModelId");
+                    b.HasIndex("ModelID");
 
                     b.ToTable("Sales");
                 });
@@ -429,7 +432,7 @@ namespace Eko.Data.Migrations
                 {
                     b.HasOne("Eko.Models.Model")
                         .WithMany("PriceHistory")
-                        .HasForeignKey("ModelId")
+                        .HasForeignKey("ModelID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

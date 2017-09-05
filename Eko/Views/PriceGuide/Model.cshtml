@@ -1,0 +1,46 @@
+﻿@model Eko.Models.PriceGuideViewModels.ModelViewModel
+
+<h2>Price Guide: @Model.Brand.Name @Model.Model.Name</h2>
+
+<table class="table">
+    <tr>
+        <th>Date</th>
+        <th>Price</th>
+    </tr>
+    @foreach (var sale in Model.Model.PriceHistory.OrderBy(s => s.Date))
+    {
+        <tr>
+            <td>@sale.Date</td>
+            <td>@sale.Price</td>
+        </tr>
+    }
+</table>
+
+<br />
+
+<h2>Items for Sale</h2>
+@if (Model.Items.Count != 0)
+{
+    <table class="table">
+        <tr>
+            <th>Owner</th>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Description</th>
+        </tr>
+
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@item.Owner.UserName</td>
+                <td><a asp-controller="Items" asp-action="ViewItem" asp-route-id="@item.ID">@item.Title</a></td>
+                <td>$@item.Price</td>
+                <td>@item.Description</td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>Nothing for sale!</p>
+}

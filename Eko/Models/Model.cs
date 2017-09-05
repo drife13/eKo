@@ -11,5 +11,12 @@ namespace Eko.Models
         public string Name { get; set; }
 
         public Brand Brand { get; set; }
+
+        public List<Sale> PriceHistory { get; set; }
+
+        public Model()
+        {
+            PriceHistory = new List<Sale>();
+        }
     }
 }

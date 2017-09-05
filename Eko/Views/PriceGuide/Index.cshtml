@@ -1,0 +1,25 @@
+﻿@model List<Model>
+
+<h2>Price Guide</h2>
+
+@if (Model.Count != 0)
+{
+    <table class="table">
+        <tr>
+            <th>Brand</th>
+            <th>Model</th>
+        </tr>
+
+    @foreach (Model mod in Model)
+    {
+        <tr>
+            <td><a href="/Search?brand=@mod.Brand.URLName">@mod.Brand.Name</a></td>
+            <td><a asp-controller="PriceGuide" asp-action="Model" asp-route-id="@mod.ID">@mod.Name</a></td>
+        </tr>
+    }
+    </table>
+}
+else
+{
+    <p>Nothing for sale!</p>
+}

@@ -59,30 +59,38 @@ namespace Eko.Controllers
         //[Route("/Orders/ViewItem/{id}")]
         public IActionResult ViewItem(int id)
         {
-            string userId = User.Identity.IsAuthenticated ? User.FindFirst(ClaimTypes.NameIdentifier).Value : "";
-
-            Item item = db
+            List<Item> existingItem = db
                 .Items
                 .Include(i => i.Owner)
                 .Include(i => i.Brand)
                 .Include(i => i.Model)
                 .Include(i => i.Category)
-                .Single(i => i.ID == id);
+                .Where(i => i.ID == id)
+                .ToList();
 
-            List<Guid> imageIds = db.Images.Where(m => m.Item.ID == id).Select(m => m.Id).ToList();
-            int watchers = db.WatchListItems.Where(i => i.ItemID == id).ToList().Count;
-
-            bool owner = item.OwnerId == userId ? true : false;
-            
-            ViewItemViewModel viewItemViewModel = new ViewItemViewModel()
+            if (existingItem.Count != 0)
             {
-                Item = item,
-                Owner = owner,
-                ImageIds = imageIds,
-                Watchers = watchers
-            };
+                Item item = existingItem[0];
 
-            return View(viewItemViewModel);
+                string userId = User.Identity.IsAuthenticated ? User.FindFirst(ClaimTypes.NameIdentifier).Value : "";
+                bool owner = item.OwnerId == userId ? true : false;
+
+                List<Guid> imageIds = db.Images.Where(m => m.Item.ID == id).Select(m => m.Id).ToList();
+
+                int watchers = db.WatchListItems.Where(i => i.ItemID == id).ToList().Count;
+
+                ViewItemViewModel viewItemViewModel = new ViewItemViewModel()
+                {
+                    Item = item,
+                    Owner = owner,
+                    ImageIds = imageIds,
+                    Watchers = watchers
+                };
+
+                return View(viewItemViewModel);
+            }
+
+            return Redirect("/Search");
         }
 
         [HttpGet]

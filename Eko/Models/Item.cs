@@ -85,11 +85,24 @@ namespace Eko.Models
             Year = e.Year;
         }
 
-        public void Sell()
+        public Sale Sell(Order order)
         {
             ForSale = false;
             Sold = true;
-            SoldDate = DateTime.Now;
+            SoldDate = order.OrderDate;
+
+            Sale sale = new Sale()
+            {
+                Date = SoldDate,
+                Price = Price,
+                ItemId = ID,
+                ModelId = ModelID
+            };
+
+            Model.PriceHistory.Add(sale);
+            order.Items.Add(this);
+
+            return sale;
         }
     }
 }

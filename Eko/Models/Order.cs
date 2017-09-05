@@ -16,7 +16,19 @@ namespace Eko.Models
 
         public DateTime OrderDate { get; set; }
 
-        public decimal Total { get; set; }
+        public decimal Total
+        {
+            get
+            {
+                decimal total = 0;
+                foreach (Item item in Items)
+                {
+                    total += item.Price;
+                }
+                return total;
+            }
+            set { }
+        }
 
         public Order() { }
 
@@ -25,7 +37,6 @@ namespace Eko.Models
             ApplicationUser = user;
             ApplicationUserID = user.Id;
             Items = new List<Item>();
-            Total = 0;
             OrderDate = DateTime.Now;
         }
     }

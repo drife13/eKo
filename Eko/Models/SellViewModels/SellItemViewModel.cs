@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Linq;
 
 namespace Eko.Models.ItemViewModels
 {
@@ -49,7 +50,6 @@ namespace Eko.Models.ItemViewModels
         public SellItemViewModel(List<Category> categories)
         {
             Conditions = new List<SelectListItem>();
-
             foreach (Condition condition in Enum.GetValues(typeof(Condition)))
             {
                 Conditions.Add(new SelectListItem
@@ -60,7 +60,7 @@ namespace Eko.Models.ItemViewModels
             }
 
             Categories = new List<SelectListItem>();
-            foreach (Category category in categories)
+            foreach (Category category in categories.OrderBy(c => c.FullName))
             {
                 Categories.Add(new SelectListItem
                 {

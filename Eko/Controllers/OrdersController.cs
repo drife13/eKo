@@ -32,6 +32,7 @@ namespace Eko.Controllers
 
                 List<Order> orders = db
                     .Orders
+                    .Include(i => i.Items)
                     .Where(c => c.ApplicationUserID == userId)
                     .OrderBy(c => c.OrderDate)
                     .ToList();

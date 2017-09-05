@@ -161,11 +161,9 @@ namespace Eko.Controllers
                         db.CartItems.Remove(cartItem);
                     }
 
-                    Item item = db.Items.Single(i => i.ID == cartItemId);
-                    item.Sell();
+                    Item item = db.Items.Include(i => i.Model).Single(i => i.ID == cartItemId);
 
-                    newOrder.Items.Add(item);
-                    newOrder.Total += item.Price;
+                    db.Sales.Add(item.Sell(newOrder));
                 }
                 db.Orders.Add(newOrder);
 
