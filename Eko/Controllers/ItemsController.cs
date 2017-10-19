@@ -84,7 +84,7 @@ namespace Eko.Controllers
                     Item = item,
                     Owner = owner,
                     ImageIds = imageIds,
-                    Watchers = watchers
+                    Watchers = watchers,
                 };
 
                 return View(viewItemViewModel);

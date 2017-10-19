@@ -4,6 +4,21 @@
     ViewData["Title"] = "Recently Added Items";
 }
 
+<div>
+    <h2>About eKo</h2>
+    <p>
+        eKo is an ASP.NET Core web application written in C# that allows users to buy and sell music equipment, similar to Reverb.com, eBay, or Craigslist.
+        <h3>Features:</h3>
+        <ul>
+            <li>Users can login; post, edit, and view items for sale; add items to their watchlist or cart; and make mock purchases.</li>
+            <li>Items and images are stored in a local SQL database. Each item has descriptors including Category, Brand, and Model.</li>
+            <li>The list of all items can be queried, filtered, and sorted on the Search page. The search implements regular expressions.</li>
+            <li>If multiple items of a particular Model are sold, a Price History page is created for that model.</li>
+            <li>The Price History page displays price vs. sale date to provide users an estimated value of newly listed items.</li>
+        </ul>
+    </p>
+</div>
+
 <h2>@ViewData["Title"]</h2>
 
 @if (Model.Count != 0)

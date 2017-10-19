@@ -23,11 +23,11 @@
     </tr>
     <tr>
         <td>Brand</td>
-        <td>@Model.Item.Brand.Name</td>
+        <td><a href="/Search?brand=@Model.Item.Brand.URLName">@Model.Item.Brand.Name</a></td>
     </tr>
     <tr>
         <td>Model</td>
-        <td>@Model.Item.Model.Name</td>
+        <td><a asp-controller="PriceGuide" asp-action="Model" asp-route-id="@Model.Item.Model.ID">@Model.Item.Model.Name</a></td>
     </tr>
     <tr>
         <td>Category</td>

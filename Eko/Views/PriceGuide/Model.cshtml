@@ -2,6 +2,8 @@
 
 <h2>Price Guide: @Model.Brand.Name @Model.Model.Name</h2>
 
+<h3>Estimated Value: @Model.EstimatedValue</h3>
+
 <table class="table">
     <tr>
         <th>Date</th>
@@ -11,7 +13,7 @@
     {
         <tr>
             <td>@sale.Date</td>
-            <td>@sale.Price</td>
+            <td>$@sale.Price</td>
         </tr>
     }
 </table>
